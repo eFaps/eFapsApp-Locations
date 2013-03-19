@@ -33,19 +33,23 @@
             <property name="Attribute">Type</property>
             <property name="Label">Locations_LocationAbstract/Type.Label</property>
             <property name="ShowTypeIcon">true</property>
+            <property name="ModeSearch">READONLY</property>
         </field>
         <field name="name">
             <property name="HRef">${COMMONURL}/MenuTree.jsp</property>
             <property name="Attribute">Name</property>
             <property name="Label">Locations_LocationAbstract/Name.Label</property>
+            <property name="ModeSearch">READONLY</property>
         </field>
         <field name="description">
             <property name="Attribute">Description</property>
             <property name="Label">Locations_LocationAbstract/Description.Label</property>
+            <property name="ModeSearch">READONLY</property>
         </field>
         <field name="status">
             <property name="Attribute">StatusAbstract</property>
             <property name="Label">Locations_LocationAbstract/StatusAbstract.Label</property>
+            <property name="ModeSearch">READONLY</property>
         </field>
     </definition>
 </ui-table>
