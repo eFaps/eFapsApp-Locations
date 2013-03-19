@@ -43,5 +43,36 @@
 
     <version number="1" login="true" reloadCache="true">
         <description>Install complete Data Model and UI.</description>
+                <script type="groovy">
+            import java.io.File;
+            import java.util.UUID;
+            import org.efaps.admin.runlevel.RunLevel;
+            import org.efaps.admin.user.JAASSystem;
+            import org.efaps.admin.user.Role;
+            import org.efaps.db.Context;
+            import org.efaps.db.QueryBuilder;
+            import org.efaps.db.InstanceQuery;
+            import org.efaps.esjp.admin.ui.UIUpdate;
+            import org.efaps.importer.DataImport;
+
+            EFAPS_LOGGER.info("Importing Data for eFapsApp-Projects");
+
+            RunLevel.init("shell");
+            RunLevel.execute();
+
+            // Admin_User_JAASKey
+            QueryBuilder queryBldr = new QueryBuilder(UUID.fromString("0e7650c6-8ec3-4c63-b377-f3eb5fb85f16"));
+            queryBldr.addWhereAttrEqValue("Key", "Locations_Admin");
+            InstanceQuery query = queryBldr.getQuery();
+            query.executeWithoutAccessCheck();
+            if (!query.next()) {
+                DataImport.readFile(new URL(EFAPS_ROOTURL, "Data/IMPORT_UserJAASKey.xml")).updateInDB();
+            }
+
+            UIUpdate update = new UIUpdate();
+            <!-- connect the Locations_MyDesk Menu to the main menu from efaps -->
+            update.add2Menu("afffdbe8-623f-4212-8c24-7703cb3d3977", "87001cc3-c45c-44de-b8f1-776df507f268", 1);
+
+        </script>
     </version>
 </install>

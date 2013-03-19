@@ -31,6 +31,7 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Locations_LocationOffice</name>
+        <parent>Locations_LocationAbstract</parent>
         <attribute>
             <name>ParentLink</name>
             <type>Link</type>
