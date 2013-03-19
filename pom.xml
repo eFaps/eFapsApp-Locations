@@ -138,7 +138,7 @@
                     <passWord>Administrator</passWord>
                     <!-- used from the generateUUID goal -->
                     <count>${count}</count>
-                    <ciName>Logback</ciName>
+                    <ciName>Locations</ciName>
                 </configuration>
                 <dependencies>
                     <!-- Connection Pooling -->
