@@ -47,7 +47,7 @@
             <column name="MODIFIED"        type="DATETIME"        not-null="true"/>
             <foreign name="T_LOCLOC_FK_COMPANYID" key="COMPANYID"     reference="T_USERABSTRACT(ID)"/>
             <foreign name="T_LOCLOC_FK_CRTR"      key="CREATOR"       reference="T_USERPERSON(ID)"/>
-            <foreign name="TT_LOCLOC_FK_MDFR"     key="MODIFIER"      reference="T_USERPERSON(ID)"/>
+            <foreign name="T_LOCLOC_FK_MDFR"      key="MODIFIER"      reference="T_USERPERSON(ID)"/>
         </database>
     </definition>
 </datamodel-sqltable>
