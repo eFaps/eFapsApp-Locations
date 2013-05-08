@@ -30,6 +30,7 @@
         <name>Locations_LocationMyDesk_Menu_Action</name>
         <!-- childs -->
         <childs>
+            <child>Locations_LocationMyDesk_Menu_Action_CreateSite</child>
             <child>Locations_LocationMyDesk_Menu_Action_CreateBuilding</child>
             <child>Locations_LocationMyDesk_Menu_Action_CreateOffice</child>
             <child>Locations_LocationMyDesk_Menu_Action_Delete</child>

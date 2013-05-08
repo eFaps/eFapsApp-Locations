@@ -23,7 +23,7 @@
 <ui-command xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
     <uuid>dd66b6f6-8f02-46a5-b1bb-39b57e0791c3</uuid>
-    <file-application>eFapsApp-Projects</file-application>
+    <file-application>eFapsApp-Locations</file-application>
     <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
