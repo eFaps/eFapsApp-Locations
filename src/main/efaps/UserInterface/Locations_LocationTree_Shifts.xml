@@ -22,22 +22,23 @@
 -->
 <ui-command xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>96775d3d-dc21-4694-9e0d-7f62b6ad7d5b</uuid>
+    <uuid>5ae4356c-ae40-4804-8aac-494cc8ada779</uuid>
     <file-application>eFapsApp-Locations</file-application>
     <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Locations_LocationMyDesk</name>
+        <name>Locations_LocationTree_Shifts</name>
         <access>
             <role>Locations_Admin</role>
             <role>Locations_Modifier</role>
             <role>Locations_Reader</role>
         </access>
         <target>
-            <menu>Locations_LocationMyDesk_Menu</menu>
+            <menu>Locations_LocationTree_Shifts_Menu</menu>
             <table>Locations_LocationTable</table>
             <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Type">Locations_LocationInfrastructureAbstract</property>
+                <property name="Type">Locations_ShiftAbstract</property>
+                <property name="LinkFrom">ParentLinkAbstract</property>
             </evaluate>
         </target>
 

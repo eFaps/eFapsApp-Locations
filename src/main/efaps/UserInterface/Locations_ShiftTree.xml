@@ -1,5 +1,4 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<!--
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><!--
 
   Copyright 2003 - 2012 The eFaps Team
 
@@ -20,17 +19,15 @@
   Last Changed:    $Date$
   Last Changed By: $Author$
 
--->
-<ui-menu xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
+--><ui-menu xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
 
-    <uuid>385eb1af-ca21-47ca-a9ce-b37b6969e8ea</uuid>
+    <uuid>b52ab579-7787-4c49-97ac-c2ae4056a26c</uuid>
     <file-application>eFapsApp-Locations</file-application>
     <file-revision>$Rev$</file-revision>
 
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Locations_LocationTree</name>
+        <name>Locations_ShiftTree</name>
         <access>
             <role>Locations_Admin</role>
             <role>Locations_Modifier</role>
@@ -42,11 +39,10 @@
             <form>Locations_LocationForm</form>
         </target>
         <!-- type tree for -->
-        <type>Locations_LocationInfrastructureAbstract</type>
+        <type>Locations_ShiftAbstract</type>
         
         <childs>
             <child>Locations_LocationTree_Hours</child>
-            <child>Locations_LocationTree_Shifts</child>
         </childs>
         <!-- properties -->
         <property name="Target">content</property>

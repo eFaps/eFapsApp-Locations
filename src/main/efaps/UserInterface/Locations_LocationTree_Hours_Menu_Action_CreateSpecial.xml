@@ -22,27 +22,24 @@
 -->
 <ui-command xmlns="http://www.efaps.org/xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.efaps.org/xsd http://www.efaps.org/xsd/eFaps_1.0.xsd">
-    <uuid>96775d3d-dc21-4694-9e0d-7f62b6ad7d5b</uuid>
+    <uuid>325346ee-bfda-4829-810b-4d9cc114a973</uuid>
     <file-application>eFapsApp-Locations</file-application>
     <file-revision>$Rev$</file-revision>
     <definition>
         <version-expression>(version==latest)</version-expression>
-        <name>Locations_LocationMyDesk</name>
-        <access>
-            <role>Locations_Admin</role>
-            <role>Locations_Modifier</role>
-            <role>Locations_Reader</role>
-        </access>
+        <name>Locations_LocationTree_Hours_Menu_Action_CreateSpecial</name>
+        <!-- target definitions -->
         <target>
-            <menu>Locations_LocationMyDesk_Menu</menu>
-            <table>Locations_LocationTable</table>
-            <evaluate program="org.efaps.esjp.common.uitable.MultiPrint">
-                <property name="Type">Locations_LocationInfrastructureAbstract</property>
-            </evaluate>
+            <form>Locations_HoursSpecialForm</form>
+            <execute method="create" program="org.efaps.esjp.locations.Hours">
+
+            </execute>
         </target>
 
         <!-- properties -->
-        <property name="Target">content</property>
-        <property name="TargetShowCheckBoxes">true</property>
+        <property name="Target">modal</property>
+        <property name="TargetCreateType">Locations_HoursSpecial</property>
+        <property name="TargetMode">create</property>
+        <property name="TargetConnectAttribute">Locations_HoursAbstract/LocationAbstractLink</property>
     </definition>
 </ui-command>
