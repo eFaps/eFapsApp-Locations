@@ -119,6 +119,7 @@ public abstract class Hours_Base
         final DateTimeFormatter formatter = DateTimeFormat.forPattern("EEEE");
         final DateTimeFormatter dateFormatter = DateTimeFormat.shortDate();
         final HtmlTable table = new HtmlTable();
+        table.append("<div class=\"hours\">").append(getCss());
         table.table().tr();
         for (final Integer day : Hours_Base.WEEKDAYS) {
             table.th(new DateTime().withDayOfWeek(day).toString(formatter));
@@ -130,7 +131,7 @@ public abstract class Hours_Base
                 table.trC().tr();
             }
             final StringBuilder inner = new StringBuilder();
-            inner.append(date2.toString(dateFormatter)).append("<br/>");
+            inner.append("<span class=\"date\">").append(date2.toString(dateFormatter)).append("</span>");
             final Map<Instance, Boolean> map = dates.get(date2);
             for (final Entry<Instance, Boolean> entry : map.entrySet()) {
                 if (entry.getValue()) {
@@ -143,11 +144,28 @@ public abstract class Hours_Base
             table.td(inner.toString());
             date2 = date2.plusDays(1);
         }
-        table.trC();
-        table.tableC();
-        ret.put(ReturnValues.SNIPLETT, table.toString());
+        table.trC().tableC();
+        table.append("</div>");
+        ret.put(ReturnValues.SNIPLETT,  table.toString());
         return ret;
     }
+
+    protected String getCss()
+    {
+        final StringBuilder ret = new StringBuilder();
+        ret.append("<style type=\"text/css\">")
+            .append(".hours TD {")
+            .append("vertical-align: top;")
+            .append("}")
+            .append(".date {")
+            .append("background-color: lightgrey;")
+            .append("display: block;")
+            .append("text-align: center;")
+            .append("}")
+            .append("</style>");
+        return ret.toString();
+    }
+
 
     protected List<Instance> getLocations(final Parameter _parameter,
                                           final Instance _instance)
