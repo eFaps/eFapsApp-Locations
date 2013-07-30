@@ -157,6 +157,9 @@ public abstract class Hours_Base
             .append(".hours TD {")
             .append("vertical-align: top;")
             .append("}")
+            .append(".hours TH {")
+            .append("min-width: 100px;")
+            .append("}")
             .append(".date {")
             .append("background-color: lightgrey;")
             .append("display: block;")
@@ -371,7 +374,8 @@ public abstract class Hours_Base
         public boolean isActive(final DateTime _date)
         {
             boolean ret = false;
-            if (CILocations.HoursGeneral.uuid.equals(this.instance.getType().getUUID())) {
+            if (CILocations.HoursGeneral.uuid.equals(this.instance.getType().getUUID()) ||
+                            this.date.withDayOfWeek(_date.getDayOfWeek()).compareTo(_date) == 0) {
                 String bits = Integer.toBinaryString(this.definition);
                 bits = StringUtils.leftPad(bits, 7, "0");
                 final char[] bitArr = bits.toCharArray();
