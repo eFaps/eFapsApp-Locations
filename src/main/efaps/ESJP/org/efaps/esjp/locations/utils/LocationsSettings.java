@@ -35,5 +35,11 @@ import org.efaps.admin.program.esjp.EFapsUUID;
 @EFapsRevision("$Rev$")
 public interface LocationsSettings
 {
+    /**
+     * Integer.<br/>
+     * Number of Days that will be shown in the Hours Field of a Location.
+     * Default: 45.
+     */
+    String DAYSHOURS = "org.efaps.locations.DaysShownInHoursField";
 
 }

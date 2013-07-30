@@ -22,13 +22,14 @@
 package org.efaps.esjp.locations;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Map.Entry;
+import java.util.Set;
 import java.util.TreeMap;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 import org.efaps.admin.datamodel.ui.FieldValue;
 import org.efaps.admin.dbproperty.DBProperties;
 import org.efaps.admin.event.Parameter;
@@ -50,11 +51,13 @@ import org.efaps.db.SelectBuilder;
 import org.efaps.esjp.ci.CILocations;
 import org.efaps.esjp.common.uiform.Create;
 import org.efaps.esjp.locations.utils.Locations;
+import org.efaps.esjp.locations.utils.LocationsSettings;
 import org.efaps.esjp.ui.html.HtmlTable;
 import org.efaps.util.EFapsException;
 import org.joda.time.DateMidnight;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeConstants;
+import org.joda.time.LocalTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 
@@ -83,38 +86,60 @@ public abstract class Hours_Base
 
     private static final char TRUECRITERIA = "1".toCharArray()[0];
 
+
+    public Map<DateTime, Set<HoursInfo>> getDates2Infos(final Parameter _parameter,
+                                                                final Instance _parentLocInst,
+                                                          final DateTime _startDate,
+                                                          final DateTime _endDate)
+        throws EFapsException
+    {
+        final Map<DateTime, Set<HoursInfo>> ret = new TreeMap<DateTime, Set<HoursInfo>>();
+
+        final List<Instance> locInstances = getLocations(_parameter, _parentLocInst);
+        locInstances.add(_parentLocInst);
+
+        final List<HoursInfo> generals = getHours(_parameter, locInstances, _startDate, _endDate,
+                        CILocations.HoursGeneral);
+        DateTime date = _startDate;
+        while (!date.isAfter(_endDate)) {
+            final Set<HoursInfo> set = new HashSet<HoursInfo>();
+            ret.put(date, set);
+            for (final HoursInfo info : generals) {
+                set.add(info);
+            }
+            date = date.plusDays(1);
+        }
+
+        final List<HoursInfo> specials = getHours(_parameter, locInstances, _startDate, _endDate,
+                        CILocations.HoursSpecial);
+        DateTime date3 = _startDate;
+        while (!date3.isAfter(_endDate)) {
+            final Set<HoursInfo> set = ret.get(date3);
+            for (final HoursInfo info : specials) {
+                if (info.getDate().compareTo(date3.withDayOfWeek(DateTimeConstants.MONDAY)) == 0) {
+                    if (set.contains(info)) {
+                        set.remove(info);
+                    }
+                    set.add(info);
+                }
+            }
+            date3 = date3.plusDays(1);
+        }
+        return ret;
+    }
+
+
     public Return getHoursFieldValue(final Parameter _parameter)
         throws EFapsException
     {
         final Return ret = new Return();
         final DateTime startDate = new DateMidnight().toDateTime().withDayOfWeek(DateTimeConstants.MONDAY);
-        final DateTime endDate = startDate.plusDays(45).withDayOfWeek(DateTimeConstants.SUNDAY);
-        final List<Instance> locInstances = getLocations(_parameter,  _parameter.getInstance());
-        locInstances.add(_parameter.getInstance());
-        final List<HoursInfo> generals = getHours(_parameter, locInstances, startDate, endDate, CILocations.HoursGeneral);
 
-        final Map<DateTime, Map<Instance, Boolean>> dates = new TreeMap<DateTime, Map<Instance, Boolean>>();
-        DateTime date = startDate;
-        while (!date.isAfter(endDate)) {
-            final Map<Instance, Boolean> map = new HashMap<Instance, Boolean>();
-            dates.put(date, map);
-            for (final HoursInfo info : generals) {
-                map.put(info.getLocInstance(), info.isActive(date));
-            }
-            date = date.plusDays(1);
-        }
+        final int days = Locations.getSysConfig().getAttributeValueAsInteger(LocationsSettings.DAYSHOURS);
+        final DateTime endDate = startDate.plusDays(days > 0 ? days : 45).withDayOfWeek(DateTimeConstants.SUNDAY);
 
-        final List<HoursInfo> specials = getHours(_parameter, locInstances, startDate, endDate, CILocations.HoursSpecial);
-        DateTime date3 = startDate;
-        while (!date3.isAfter(endDate)) {
-            final Map<Instance, Boolean> map = dates.get(date3);
-            for (final HoursInfo info : specials) {
-                if (info.getDate().compareTo(date3.withDayOfWeek(DateTimeConstants.MONDAY)) == 0) {
-                    map.put(info.getLocInstance(), info.isActive(date3));
-                }
-            }
-            date3 = date3.plusDays(1);
-        }
+        final Map<DateTime, Set<HoursInfo>> dates = getDates2Infos(_parameter, _parameter.getInstance(), startDate,
+                        endDate);
 
         final DateTimeFormatter formatter = DateTimeFormat.forPattern("EEEE");
         final DateTimeFormatter dateFormatter = DateTimeFormat.shortDate();
@@ -132,10 +157,10 @@ public abstract class Hours_Base
             }
             final StringBuilder inner = new StringBuilder();
             inner.append("<span class=\"date\">").append(date2.toString(dateFormatter)).append("</span>");
-            final Map<Instance, Boolean> map = dates.get(date2);
-            for (final Entry<Instance, Boolean> entry : map.entrySet()) {
-                if (entry.getValue()) {
-                    final PrintQuery print = new CachedPrintQuery(entry.getKey(), Locations.CACHKEY);
+            final Set<HoursInfo> set = dates.get(date2);
+            for (final HoursInfo info : set) {
+                if (info.isActive(date2)) {
+                    final PrintQuery print = new CachedPrintQuery(info.getLocInstance(), Locations.CACHKEY);
                     print.addAttribute(CILocations.LocationAbstract.Name);
                     print.execute();
                     inner.append(print.getAttribute(CILocations.LocationAbstract.Name)).append("<br/>");
@@ -209,7 +234,8 @@ public abstract class Hours_Base
         multi.setEnforceSorted(true);
         final SelectBuilder sel = SelectBuilder.get().linkto(CILocations.HoursAbstract.LocationAbstractLink).instance();
         multi.addSelect(sel);
-        multi.addAttribute(CILocations.HoursAbstract.Date, CILocations.HoursAbstract.Definition);
+        multi.addAttribute(CILocations.HoursAbstract.Date, CILocations.HoursAbstract.Definition,
+                        CILocations.HoursAbstract.FromTime, CILocations.HoursAbstract.ToTime);
         multi.execute();
         while (multi.next()) {
             final HoursInfo info = new HoursInfo();
@@ -218,6 +244,8 @@ public abstract class Hours_Base
             info.setLocInstance(multi.<Instance>getSelect(sel));
             info.setDate(multi.<DateTime>getAttribute(CILocations.HoursAbstract.Date));
             info.setDefinition(multi.<Integer>getAttribute(CILocations.HoursAbstract.Definition));
+            info.setToTime(multi.<LocalTime>getAttribute(CILocations.HoursAbstract.ToTime));
+            info.setFromTime(multi.<LocalTime>getAttribute(CILocations.HoursAbstract.FromTime));
         }
         return ret;
     }
@@ -347,9 +375,13 @@ public abstract class Hours_Base
     }
 
 
-    public class HoursInfo
+    public static class HoursInfo
     {
         private DateTime date;
+
+        private LocalTime fromTime;
+
+        private LocalTime toTime;
 
         private Integer definition;
 
@@ -366,7 +398,6 @@ public abstract class Hours_Base
         {
             return this.date;
         }
-
 
         /**
          * @param _date
@@ -391,7 +422,6 @@ public abstract class Hours_Base
             return ret;
         }
 
-
         /**
          * Setter method for instance variable {@link #date}.
          *
@@ -401,8 +431,6 @@ public abstract class Hours_Base
         {
             this.date = _date;
         }
-
-
 
         /**
          * Getter method for the instance variable {@link #definition}.
@@ -414,8 +442,6 @@ public abstract class Hours_Base
             return this.definition;
         }
 
-
-
         /**
          * Setter method for instance variable {@link #definition}.
          *
@@ -425,8 +451,6 @@ public abstract class Hours_Base
         {
             this.definition = _definition;
         }
-
-
 
         /**
          * Getter method for the instance variable {@link #instance}.
@@ -438,8 +462,6 @@ public abstract class Hours_Base
             return this.instance;
         }
 
-
-
         /**
          * Setter method for instance variable {@link #instance}.
          *
@@ -449,8 +471,6 @@ public abstract class Hours_Base
         {
             this.instance = _instance;
         }
-
-
 
         /**
          * Getter method for the instance variable {@link #locInstance}.
@@ -462,8 +482,6 @@ public abstract class Hours_Base
             return this.locInstance;
         }
 
-
-
         /**
          * Setter method for instance variable {@link #locInstance}.
          *
@@ -472,6 +490,70 @@ public abstract class Hours_Base
         public void setLocInstance(final Instance _locInstance)
         {
             this.locInstance = _locInstance;
+        }
+
+        /**
+         * Getter method for the instance variable {@link #fromTime}.
+         *
+         * @return value of instance variable {@link #fromTime}
+         */
+        public LocalTime getFromTime()
+        {
+            return this.fromTime;
+        }
+
+        /**
+         * Setter method for instance variable {@link #fromTime}.
+         *
+         * @param _fromTime value for instance variable {@link #fromTime}
+         */
+        public void setFromTime(final LocalTime _fromTime)
+        {
+            this.fromTime = _fromTime;
+        }
+
+        /**
+         * Getter method for the instance variable {@link #toTime}.
+         *
+         * @return value of instance variable {@link #toTime}
+         */
+        public LocalTime getToTime()
+        {
+            return this.toTime;
+        }
+
+        /**
+         * Setter method for instance variable {@link #toTime}.
+         *
+         * @param _toTime value for instance variable {@link #toTime}
+         */
+        public void setToTime(final LocalTime _toTime)
+        {
+            this.toTime = _toTime;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return this.locInstance.hashCode();
+        }
+
+        @Override
+        public boolean equals(final Object _obj)
+        {
+            final boolean ret;
+            if (_obj instanceof HoursInfo) {
+                ret = this.locInstance.equals(((HoursInfo) _obj).locInstance);
+            } else {
+                ret = super.equals(_obj);
+            }
+            return ret;
+        }
+
+        @Override
+        public String toString()
+        {
+            return ToStringBuilder.reflectionToString(this);
         }
     }
 }
