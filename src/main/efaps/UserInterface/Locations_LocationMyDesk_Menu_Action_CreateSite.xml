@@ -29,6 +29,11 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Locations_LocationMyDesk_Menu_Action_CreateSite</name>
+
+        <access>
+            <role>Locations_Admin</role>
+        </access>
+
         <!-- target definitions -->
         <target>
             <form>Locations_LocationForm</form>

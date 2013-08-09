@@ -28,6 +28,11 @@
     <definition>
         <version-expression>(version==latest)</version-expression>
         <name>Locations_LocationMyDesk_Menu_Action_Delete</name>
+
+        <access>
+            <role>Locations_Admin</role>
+        </access>
+
         <target>
             <execute program="org.efaps.esjp.common.uitable.CommonDelete" />
         </target>
