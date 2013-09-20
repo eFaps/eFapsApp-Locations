@@ -48,6 +48,13 @@
             <sqlcolumn>ID</sqlcolumn>
         </attribute>
         <attribute>
+            <name>FromAbstractLink</name>
+            <type>Link</type>
+            <typelink>Locations_LocationAbstract</typelink>
+            <sqltable>Locations_Location2ObjectSQLTable</sqltable>
+            <sqlcolumn>FROMID</sqlcolumn>
+        </attribute>
+        <attribute>
             <name>Creator</name>
             <type>CreatorLink</type>
             <sqltable>Locations_Location2ObjectSQLTable</sqltable>
