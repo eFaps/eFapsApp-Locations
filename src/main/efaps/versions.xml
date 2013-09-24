@@ -71,7 +71,7 @@
 
             UIUpdate update = new UIUpdate();
             <!-- connect the Locations_MyDesk Menu to the main menu from efaps -->
-            update.add2Menu("afffdbe8-623f-4212-8c24-7703cb3d3977", "87001cc3-c45c-44de-b8f1-776df507f268", 1);
+            update.add2Menu("afffdbe8-623f-4212-8c24-7703cb3d3977", "87001cc3-c45c-44de-b8f1-776df507f268", 2);
 
         </script>
     </version>
