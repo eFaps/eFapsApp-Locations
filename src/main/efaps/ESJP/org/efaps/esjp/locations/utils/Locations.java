@@ -52,7 +52,7 @@ public class Locations
     }
 
     /**
-     * @return the SystemConfigruation for Sales
+     * @return the SystemConfigruation for locations
      * @throws CacheReloadException on error
      */
     public static SystemConfiguration getSysConfig()
