@@ -30,6 +30,7 @@
         <name>Locations_HoursForm</name>
         <field name="definition">
             <property name="HideLabel">true</property>
+            <property name="ClassNameUI">org.efaps.admin.datamodel.ui.StringUI</property>
             <trigger event="UI_FIELD_VALUE" method="getHoursFieldValue"
                 name="Locations_HoursGeneralForm.definition.UI_FIELD_VALUE"
                 program="org.efaps.esjp.locations.Hours" />
