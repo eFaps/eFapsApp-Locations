@@ -163,7 +163,7 @@ public abstract class Hours_Base
                     final PrintQuery print = new CachedPrintQuery(info.getLocInstance(), Locations.CACHKEY);
                     print.addAttribute(CILocations.LocationAbstract.Name);
                     print.execute();
-                    inner.append(print.getAttribute(CILocations.LocationAbstract.Name)).append("<br/>");
+                    inner.append(print.<String>getAttribute(CILocations.LocationAbstract.Name)).append("<br/>");
                 }
             }
             table.td(inner.toString());
