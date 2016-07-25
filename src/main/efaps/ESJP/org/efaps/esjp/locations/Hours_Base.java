@@ -65,10 +65,10 @@ import org.joda.time.format.DateTimeFormatter;
  * @author The eFaps Team
  */
 @EFapsUUID("e2a8d6e1-c95b-40dc-99a5-264c5cd39bab")
-@EFapsApplication("eFapsApp-Sales")
+@EFapsApplication("eFapsApp-Locations")
 public abstract class Hours_Base
 {
-    private static final List<Integer> WEEKDAYS = new ArrayList<Integer>();
+    private static final List<Integer> WEEKDAYS = new ArrayList<>();
 
     static {
         Hours_Base.WEEKDAYS.add(DateTimeConstants.MONDAY);
@@ -89,7 +89,7 @@ public abstract class Hours_Base
                                                           final DateTime _endDate)
         throws EFapsException
     {
-        final Map<DateTime, Set<HoursInfo>> ret = new TreeMap<DateTime, Set<HoursInfo>>();
+        final Map<DateTime, Set<HoursInfo>> ret = new TreeMap<>();
 
         final List<Instance> locInstances = getLocations(_parameter, _parentLocInst);
         locInstances.add(_parentLocInst);
@@ -98,7 +98,7 @@ public abstract class Hours_Base
                         CILocations.HoursGeneral);
         DateTime date = _startDate;
         while (!date.isAfter(_endDate)) {
-            final Set<HoursInfo> set = new HashSet<HoursInfo>();
+            final Set<HoursInfo> set = new HashSet<>();
             ret.put(date, set);
             for (final HoursInfo info : generals) {
                 set.add(info);
@@ -195,7 +195,7 @@ public abstract class Hours_Base
                                           final Instance _instance)
         throws EFapsException
     {
-        final List<Instance> ret = new ArrayList<Instance>();
+        final List<Instance> ret = new ArrayList<>();
         final QueryBuilder queryBldr = new QueryBuilder(CILocations.LocationAbstract);
         queryBldr.addWhereAttrEqValue(CILocations.LocationAbstract.ParentLinkAbstract, _instance);
         final InstanceQuery query = queryBldr.getQuery();
@@ -215,7 +215,7 @@ public abstract class Hours_Base
                                     final CIType _ciType)
         throws EFapsException
     {
-        final List<HoursInfo> ret = new ArrayList<HoursInfo>();
+        final List<HoursInfo> ret = new ArrayList<>();
         final QueryBuilder queryBldr = new QueryBuilder(_ciType);
         if (CILocations.HoursGeneral.equals(_ciType)) {
             queryBldr.addWhereAttrGreaterValue(CILocations.HoursGeneral.ValidUntil, _startDate.minusSeconds(1));

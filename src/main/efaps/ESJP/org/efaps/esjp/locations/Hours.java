@@ -28,7 +28,7 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * @author The eFaps Team
  */
 @EFapsUUID("6d4084f9-9ad5-4d3c-87b1-4f38fde6f284")
-@EFapsApplication("eFapsApp-Sales")
+@EFapsApplication("eFapsApp-Locations")
 public class Hours
     extends Hours_Base
 {

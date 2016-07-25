@@ -24,7 +24,7 @@ package org.efaps.esjp.locations.utils;
 import java.util.UUID;
 
 import org.efaps.admin.common.SystemConfiguration;
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 import org.efaps.util.cache.CacheReloadException;
 
@@ -36,7 +36,7 @@ import org.efaps.util.cache.CacheReloadException;
  * @version $Id$
  */
 @EFapsUUID("a3f9278e-0fb3-4def-a3fe-035c202148ad")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Locations")
 public class Locations
 {
     /**

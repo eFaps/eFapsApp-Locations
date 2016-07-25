@@ -21,7 +21,7 @@
 
 package org.efaps.esjp.locations.utils;
 
-import org.efaps.admin.program.esjp.EFapsRevision;
+import org.efaps.admin.program.esjp.EFapsApplication;
 import org.efaps.admin.program.esjp.EFapsUUID;
 
 
@@ -32,7 +32,7 @@ import org.efaps.admin.program.esjp.EFapsUUID;
  * @version $Id$
  */
 @EFapsUUID("083ab397-1ddd-40df-b1d9-d78aa0207678")
-@EFapsRevision("$Rev$")
+@EFapsApplication("eFapsApp-Locations")
 public interface LocationsSettings
 {
     /**
